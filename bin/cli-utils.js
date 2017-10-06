@@ -220,9 +220,7 @@ Utils.findOneTxProposal = function(txps, id) {
 };
 
 Utils.UNITS = {
-  'btc': 100000000,
-  'bit': 100,
-  'sat': 1,
+  'proc': 100000000
 };
 
 Utils.parseAmount = function(text) {
@@ -237,7 +235,7 @@ Utils.parseAmount = function(text) {
   var amount = parseFloat(match[1]);
   if (!_.isNumber(amount) || _.isNaN(amount)) throw new Error('Invalid amount');
 
-  var unit = (match[3] || 'sat').toLowerCase();
+  var unit = (match[3] || 'proc').toLowerCase();
   var rate = Utils.UNITS[unit];
   if (!rate) throw new Error('Invalid unit')
 
@@ -257,19 +255,13 @@ Utils.configureCommander = function(program) {
   return program;
 };
 
-Utils.UNITS = {
-  btc: {
-    name: 'btc',
+Utils.UNITSC = {
+  proc: {
+    name: 'PROC',
     toSatoshis: 100000000,
     maxDecimals: 8,
     minDecimals: 8,
-  },
-  bit: {
-    name: 'bit',
-    toSatoshis: 100,
-    maxDecimals: 2,
-    minDecimals: 2,
-  },
+  }
 };
 
 Utils.renderAmount = function(satoshis, unit, opts) {
@@ -296,7 +288,7 @@ Utils.renderAmount = function(satoshis, unit, opts) {
 
   opts = opts || {};
 
-  var u = Utils.UNITS[unit || 'bit'];
+  var u = Utils.UNITSC[unit || 'proc'];
   var amount = clipDecimals((satoshis / u.toSatoshis), u.maxDecimals).toFixed(u.maxDecimals);
   return addSeparators(amount, opts.thousandsSeparator || ',', opts.decimalSeparator || '.', u.minDecimals) + ' ' + u.name;
 };
